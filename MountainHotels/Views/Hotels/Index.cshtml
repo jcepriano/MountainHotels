@@ -1,8 +1,16 @@
 ﻿@model IEnumerable<Hotel>
+@{
+    List<string> allLocations = ViewData["AllLocations"] as List<string>;
+}
 
 <h1>Summit Slope Retreats</h1>
 
 <h3>All Hotels</h3>
+<span>Locations:</span>@foreach(var location in allLocations)
+{
+   <a href ="/hotels?location=@location">@location</a> <span>|</span>
+}
+<a href="/hotels">All Hotels</a> |
 
 <ul>
 @foreach (var hotel in Model)
@@ -12,3 +20,5 @@
     </li>
 }
 </ul>
+
+<a href ="/hotels/new">Add Hotel</a>
