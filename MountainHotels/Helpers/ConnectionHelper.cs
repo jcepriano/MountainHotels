@@ -19,7 +19,7 @@ namespace MountainHotels.Helpers
             var builder = new NpgsqlConnectionStringBuilder
             {
                 Host = databaseUri.Host,
-                Port = 3000,
+                Port = databaseUri.Port,
                 Username = userInfo[0],
                 Password = userInfo[1],
                 Database = databaseUri.AbsolutePath.TrimStart('/'),
