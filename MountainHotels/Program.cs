@@ -10,7 +10,7 @@ builder.Services.AddDbContext<MountainHotelsContext>(
     options =>
         options
             .UseNpgsql(
-                builder.Configuration.GetConnectionString("MountainHotelsDb")
+                builder.Configuration["ConnectionStrings:DefaultConnection"]
                     ?? throw new InvalidOperationException(
                         "Connection string 'MountainHotelsDb' not found."
                     )
