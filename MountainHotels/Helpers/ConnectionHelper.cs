@@ -8,12 +8,17 @@ namespace MountainHotels.Helpers
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-            return string.IsNullOrEmpty(databaseUrl) ? connectionString : BuildConnectionString(databaseUrl);
+            return string.IsNullOrEmpty(databaseUrl) ? connectionString : BuildConnectionString(configuration, databaseUrl);
         }
 
-        //build the connection string from the environment. i.e. Heroku
-        private static string BuildConnectionString(string databaseUrl)
+        // Build the connection string from the environment, e.g., Heroku
+        private static string BuildConnectionString(IConfiguration configuration, string databaseUrl)
         {
+            if (string.IsNullOrEmpty(databaseUrl))
+            {
+                return configuration.GetConnectionString("DefaultConnection");
+            }
+
             var databaseUri = new Uri(databaseUrl);
             var userInfo = databaseUri.UserInfo.Split(':');
             var builder = new NpgsqlConnectionStringBuilder
@@ -23,8 +28,7 @@ namespace MountainHotels.Helpers
                 Username = userInfo[0],
                 Password = userInfo[1],
                 Database = databaseUri.AbsolutePath.TrimStart('/'),
-                SslMode = SslMode.Require,
-                TrustServerCertificate = true
+                TrustServerCertificate = true // Assuming you want to trust the server certificate
             };
             return builder.ToString();
         }
